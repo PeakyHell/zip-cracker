@@ -3,6 +3,7 @@
 #include <math.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 #include <sys/stat.h>
 
 #if defined(__unix__) || defined(__APPLE__)
@@ -65,6 +66,8 @@ int test_password(char *password, char *archive_path, char *output_path, char *b
 }
 
 int test_all_passwords(long max_length, char *archive_path, char *output_path) {
+    clock_t start_time = clock();
+
     char *password;
     int buff_size = 256 + 5 + 2 + 256 + 5 + 256 + 7 + 9 + 5;
     char buffer[buff_size + max_length + 1];
@@ -77,7 +80,8 @@ int test_all_passwords(long max_length, char *archive_path, char *output_path) {
     for (long i = 0; i < limit; i++) {
         password = base_10_to_other_base(i);
         if (test_password(password, archive_path, output_path, buffer) == 0) {
-            printf("Password found : %s", password);
+
+            printf("Password : %s\nFound in : %f seconds\n", password, (float)(clock() - start_time) / CLOCKS_PER_SEC);
             exit(EXIT_SUCCESS);
         }
     }
@@ -107,6 +111,9 @@ int main(int argc, char *argv[]) {
     if (stat(input_path, &buff) == -1) {
         fprintf(stderr, "Cannot find the archive!");
         exit(EXIT_FAILURE);
+    }
+    else {
+        printf("Archive found !\nStarting the crack ...\n");
     }
 
     if (test_all_passwords(max_length, input_path, output_path) == -1) {
