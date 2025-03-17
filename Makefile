@@ -3,17 +3,19 @@ LENGTH=3
 ARCHIVE_PATH="archive.zip"
 OUTPUT_PATH="output/"
 
-main:
-	7z a archive.zip arch/* -p${PASSWORD}
+build:
 	clang -o cracker crack.c
 
-run:
+run: build
 	./cracker ${ARCHIVE_PATH} -o ${OUTPUT_PATH} -l ${LENGTH}
 
-lldb:
-	lldb -- ./cracker -- ${ARCHIVE_PATH} -o ${OUTPUT_PATH} -l ${LENGTH}
+archive:
+	7z a archive.zip arch/* -p${PASSWORD}
+
+lldb: build
+	lldb -- ./cracker ${ARCHIVE_PATH} -o ${OUTPUT_PATH} -l ${LENGTH}
 
 clean:
 	rm -f archive.zip
-	rm -r output/
+	rm -rf output/
 	rm -f cracker
