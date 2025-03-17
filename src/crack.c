@@ -12,10 +12,8 @@
 void base_10_to_other_base(int num, char* buffer) {
     // Convert to BASE
     int i = 0;
-    int digit;
     do {
-        digit = num % BASE;
-        buffer[i++] = CHARSET[digit];
+        buffer[i++] = CHARSET[num % BASE];
         num /= BASE;
     } while (num > 0);
 
@@ -23,12 +21,10 @@ void base_10_to_other_base(int num, char* buffer) {
     buffer[i] = '\0';
 
     // Reverse string
-    char *ptr = buffer;
-    int len = i;
-    for (int j = 0; j < len / 2; j++) {
-        char tmp = ptr[j];
-        ptr[j] = ptr[len - j - 1];
-        ptr[len - j - 1] = tmp;
+    for (int j = 0; j < i / 2; j++) {
+        char tmp = buffer[j];
+        buffer[j] = buffer[i - j - 1];
+        buffer[i - j - 1] = tmp;
     }
 }
 
@@ -62,17 +58,17 @@ int test_password(char *password, char *archive_path, char *output_path, char *b
 int test_all_passwords(int max_length, char *archive_path, char *output_path) {
     clock_t start_time = clock();
 
-    // Create a buffer to store the 7zip command
-    int buff_size = 256 + 5 + 2 + 256 + 5 + 256 + 7 + 9 + 5;
-    char command_buffer[buff_size + max_length + 1];
-
     // Calculate the number of possibilities
     long limit = 1;
     for (int i = 0; i < max_length; i++){
         limit *= BASE;
     }
 
+    // Create password and command buffers
     char password[max_length * 2 + 1];
+    char command_buffer[1024];
+    
+    // Tests all passwords
     for (long i = 0; i < limit; i++) {
         // Create the password from the base 10 number
         base_10_to_other_base(i, password);
