@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-#include <unistd.h>
-#include <time.h>
-#include <sys/stat.h>
+#include "../headers/crack.h"
 
 #if defined(__unix__) || defined(__APPLE__)
 #define OS "UNIX"
@@ -65,7 +59,7 @@ int test_password(char *password, char *archive_path, char *output_path, char *b
     return system(buffer);
 }
 
-int test_all_passwords(long max_length, char *archive_path, char *output_path) {
+int test_all_passwords(int max_length, char *archive_path, char *output_path) {
     clock_t start_time = clock();
 
     // Create a buffer to store the 7zip command

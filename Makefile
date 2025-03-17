@@ -6,7 +6,7 @@ OUTPUT_PATH="output/"
 
 # Compile the cracker
 build:
-	clang -o cracker crack.c
+	clang -o cracker src/crack.c
 
 # Create a zip archive at ARCHIVE_PATH with the content of SOURCE_PATH and secures it with PASSWORD
 archive:
