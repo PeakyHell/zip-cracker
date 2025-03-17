@@ -69,7 +69,12 @@ int test_all_passwords(long max_length, char *archive_path, char *output_path) {
     int buff_size = 256 + 5 + 2 + 256 + 5 + 256 + 7 + 9 + 5;
     char buffer[buff_size + max_length + 1];
 
-    for (long i = 0; i < pow(BASE, max_length); i++) {
+    long limit = 1;
+    for (int i = 0; i < max_length; i++){
+        limit *= BASE;
+    }
+
+    for (long i = 0; i < limit; i++) {
         password = base_10_to_other_base(i);
         if (test_password(password, archive_path, output_path, buffer) == 0) {
             printf("Password found : %s", password);
